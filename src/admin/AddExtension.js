@@ -5,6 +5,12 @@ const AddExtension = () => {
   const [fullname, setFullname]=useState("");
   const [department, setDepartment]=useState("");
   const [extension, setExtension]=useState("");
+
+  const handleAddExtension=(e)=>{
+    e.preventDefaults();
+  }
+
+  console.warn(fullname, department,extension)
   
   return (
     <div>
@@ -34,7 +40,7 @@ const AddExtension = () => {
           aria-label="Username"
           aria-describedby="addon-wrapping"
         />
-        <button type="button" className="btn btn-primary mt-4 d-flex justify-content-center ">
+        <button onClick={handleAddExtension} type="button" className="btn btn-primary mt-4 d-flex justify-content-center ">
           Add Extension
         </button>
       </form>

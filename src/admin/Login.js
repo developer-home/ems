@@ -5,18 +5,20 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate=(useNavigate());
 
   const Login = () => {
-    // if(username==="Admin2022" && password==="Enterprise@2022!"){
-    //   navigate('/Admin/Dashboard')
-    // }
+    if(username==="admin" && password==="@2022!"){
+      navigate('/Admin/Dashboard')
+    }
 
-    Axios.post("http://localhost:8080/loginAdmin",{
-      username: username,
-      password: password,
-    }).then((resp) => {
-      console.log(resp)
-    });
+    // Axios.post("http://localhost:8080/loginAdmin",{
+    //   username: username,
+    //   password: password,
+    // }).then((resp) => {
+    //   console.log(username, password)
+    //   console.log(resp)
+    // });
   };
   return (
     <div className="container-sm bg-secondary d-flex justify-content-center resize">
