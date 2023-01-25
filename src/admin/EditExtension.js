@@ -1,13 +1,45 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+const initialState = {
+  FullNames: "",
+  Department: "",
+  Extension: "",
+};
 
 const EditExtension = () => {
-  const [fullname, setFullName] = useState();
-  const [department, setDepartment] = useState();
-  const [extension, setExtension] = useState();
+  const [state, setState] = useState(initialState);
+
+  const { FullNames, Department, Extension } = state;
+
+  const { id } = useParams();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/extensions/${id}`)
+      .then((resp) => setState(...resp.data[0]));
+  }, [id]);
 
   const handleUpdate = () => {
-    console.log(fullname + department + extension);
+    axios
+      .put(`http://localhost:8080/extensions/${id}`, {
+        FullNames,
+        Department,
+        Extension,
+      })
+      .then(() => {
+        setState({ FullNames: "", Department: "", Extension: "" });
+      })
+      .catch((error) => toast.error(error.response.data));
+      toast.success("Contact Updated Successfully!!");
+  };
+  const handleChange = (e) => {
+    const { FullNames, value } = e.target;
+    setState({ ...state, [FullNames]: value });
   };
 
   return (
@@ -24,9 +56,8 @@ const EditExtension = () => {
             <input
               type="text"
               className="form-control"
-              onChange={(event) => {
-                setFullName(event.target.value);
-              }}
+              value={FullNames || ""}
+              onChange={handleChange}
               placeholder="FullName"
             />
           </div>
@@ -34,9 +65,8 @@ const EditExtension = () => {
             <input
               type="text"
               className="form-control"
-              onChange={(event) => {
-                setDepartment(event.target.value);
-              }}
+              value={Department || ""}
+              onChange={handleChange}
               placeholder="Department"
             />
           </div>
@@ -44,9 +74,8 @@ const EditExtension = () => {
             <input
               type="number"
               className="form-control"
-              onChange={(event) => {
-                setExtension(event.target.value);
-              }}
+              value={Extension || ""}
+              onChange={handleChange}
               placeholder="Extension"
             />
           </div>
