@@ -1,10 +1,11 @@
 import React from "react";
-import { BsMenuApp, BsPencil, BsTrash, BsEye } from "react-icons/bs";
+import { BsMenuApp, BsPencil, BsTrash } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { InputGroup, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Spinner from "../components/Spinner";
+import { ToastContainer, toast } from "react-toastify";
 
 const Dashboard = () => {
   const [search, setSearch] = useState("");
@@ -20,6 +21,24 @@ const Dashboard = () => {
     };
     fetchExtensions();
   }, []);
+
+
+  const handleDelete= async (id)=>{
+    if(window.confirm("Are your sure you want to delete the Extension!")){
+      axios.delete(`http://localhost:8080/extensions/${id}`);
+      toast.success("Extension Deleted Successfully!!", {
+        position: "bottom-right",
+        autoClose: 500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setTimeout(()=>{window.location.reload()},500)
+    }
+  }
   return (
     <div className="container p-3 mt-3">
       <h3 className="text-orange">
@@ -70,12 +89,12 @@ const Dashboard = () => {
               <td className="col-md-2">{ext.Extension}</td>
               <td className="col-md-2 d-flex justify-content-end">
                 <button className="btn btn-success me-2">
-                  <Link to={'/extension/edit/:id'}>
-                  <BsPencil />
+                  <Link to={`/extension/edit/${ext.id}`}>
+                  <BsPencil style={{fill:"white"}}/>
                   </Link>
                   
                 </button>
-                <button className="btn btn-danger ">
+                <button onClick={()=>handleDelete(ext.id)} className="btn btn-danger ">
                   <BsTrash />
                 </button>
               </td>
@@ -84,6 +103,18 @@ const Dashboard = () => {
         </tbody>
       </table>
 }
+<ToastContainer
+position="bottom-right"
+autoClose={500}
+hideProgressBar
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="colored"
+/>
     </div>
   );
 };
