@@ -57,7 +57,6 @@ const EditExtension = () => {
   const handleChange = (e) => {
     const { name, value } = e.target
     setState({ ...state, [name]: value });
-    
   };
 
   return (
