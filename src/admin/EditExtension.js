@@ -18,11 +18,26 @@ const EditExtension = () => {
 
   const navigate = useNavigate();
 
+
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/extensions/${id}`)
-      .then((resp) => setState(...resp.data[0]));
+    const fetchSingleExtension = async () => {
+      const res=await axios.get(`http://localhost:8080/extensions/${id}`)
+      setState(res.data);
+    };
+    fetchSingleExtension();
   }, [id]);
+
+  
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:8080/extensions/${id}`)
+  //     .then((resp)=>{
+  //       console.log(resp.response.data);
+  //     })
+  //     /*.then((resp) => setState(...resp.data[0]));
+  //     console.log(response.data[0])*/
+  // }, [id]);
 
   const handleUpdate = () => {
     axios
@@ -36,10 +51,13 @@ const EditExtension = () => {
       })
       .catch((error) => toast.error(error.response.data));
       toast.success("Contact Updated Successfully!!");
+      navigate('/Admin/Dashboard')
   };
+
   const handleChange = (e) => {
-    const { FullNames, value } = e.target;
-    setState({ ...state, [FullNames]: value });
+    const { name, value } = e.target
+    setState({ ...state, [name]: value });
+    
   };
 
   return (
@@ -51,12 +69,14 @@ const EditExtension = () => {
         <span>Edit Extension</span>
       </div>
       <div className="card-body">
-        <form className="m-5" action="">
+        <form className="m-5" onSubmit={handleUpdate}>
           <div className="form-group mb-3">
             <input
               type="text"
+              id="FullNames"
               className="form-control"
-              value={FullNames || ""}
+              name="FullNames"
+              value={FullNames||""}
               onChange={handleChange}
               placeholder="FullName"
             />
@@ -64,8 +84,10 @@ const EditExtension = () => {
           <div class="form-group mb-3">
             <input
               type="text"
+              id="Department"
               className="form-control"
-              value={Department || ""}
+              name="Department"
+              value={Department||""}
               onChange={handleChange}
               placeholder="Department"
             />
@@ -73,13 +95,15 @@ const EditExtension = () => {
           <div class="form-group mb-3">
             <input
               type="number"
+              id="Extension"
               className="form-control"
-              value={Extension || ""}
+              name="Extension"
+              value={Extension||""}
               onChange={handleChange}
               placeholder="Extension"
             />
           </div>
-          <button onClick={handleUpdate} className="btn btn-primary p-1 me-2">
+          <button type="submit" className="btn btn-primary p-1 me-2">
             Save Changes
           </button>
           <button className="btn btn-danger p-1">Cancel</button>
