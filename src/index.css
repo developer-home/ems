@@ -26,4 +26,9 @@
 .text-orange{
     color: orange;
 }
+.footer{
+    position:absolute;
+    bottom: 0;
+    width: 80%;
+}
 

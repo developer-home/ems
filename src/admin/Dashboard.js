@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 const Dashboard = () => {
   const [search, setSearch] = useState("");
-  const [loading, setLoading]= useState(false);
+  const [loading, setLoading] = useState(false);
   const [extension, setExtensions] = useState([]);
 
   useEffect(() => {
@@ -22,9 +22,8 @@ const Dashboard = () => {
     fetchExtensions();
   }, []);
 
-
-  const handleDelete= async (id)=>{
-    if(window.confirm("Are your sure you want to delete the Extension!")){
+  const handleDelete = async (id) => {
+    if (window.confirm("Are your sure you want to delete the Extension!")) {
       axios.delete(`http://localhost:8080/extensions/${id}`);
       toast.success("Extension Deleted Successfully!!", {
         position: "bottom-right",
@@ -36,9 +35,11 @@ const Dashboard = () => {
         progress: undefined,
         theme: "colored",
       });
-      setTimeout(()=>{window.location.reload()},500)
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     }
-  }
+  };
   return (
     <div className="container p-3 mt-3">
       <h3 className="text-orange">
@@ -52,20 +53,19 @@ const Dashboard = () => {
           <InputGroup className="me-3">
             <Form.Control
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Filter by Extension"
+              placeholder="Filter by Name...."
             />
           </InputGroup>
         </div>
         <div className="col-md-6 d-flex justify-content-end">
           <button className="btn btn-success d-flex justify-content-end">
-            <Link className="none text-white" to={"/Admin/%20%/AddNew"}>
+            <Link className="none text-white" to={"/Admin/AddNew"}>
               Add Extension
             </Link>
           </button>
         </div>
       </form>
-      {
-      loading ? <Spinner/> :
+
       <table className="table table-striped hover mt-3">
         <thead className="table-info">
           <tr className="row">
@@ -76,45 +76,61 @@ const Dashboard = () => {
             <th className="col-md-2 d-flex justify-content-end">Action</th>
           </tr>
         </thead>
-        <tbody>
-          {extension.filter((item) => {
-              return search.toLocaleLowerCase() === ""
-                ? item
-                : item.FullNames.toLocaleLowerCase().includes(search);
-            }).map((ext) => [
-            <tr className="row">
-              <td className="col-md-2">{ext.id}</td>
-              <td className="col-md-3">{ext.FullNames}</td>
-              <td className="col-md-3">{ext.Department}</td>
-              <td className="col-md-2">{ext.Extension}</td>
-              <td className="col-md-2 d-flex justify-content-end">
-                <button className="btn btn-success me-2">
-                  <Link to={`/extension/edit/${ext.id}`}>
-                  <BsPencil style={{fill:"white"}}/>
-                  </Link>
-                  
-                </button>
-                <button onClick={()=>handleDelete(ext.id)} className="btn btn-danger ">
-                  <BsTrash />
-                </button>
+        {extension.length === 0 ? (
+          <tbody>
+            <tr>
+              <td colSpan={8} className="text-center mb-0">
+                {" "}
+                No Data Found in the database
               </td>
-            </tr>,
-          ])}
-        </tbody>
+            </tr>
+          </tbody>
+        ) : (
+          extension
+          .filter((item) => {
+            return search.toLocaleLowerCase() === ""
+              ? item
+              : item.FullNames.toLocaleLowerCase().includes(search);
+          })
+          
+          .map((data) => (
+            <tbody>
+              <tr className="row">
+              <td className="col-md-2">{data.id}</td>
+              <td className="col-md-3">{data.FullNames}</td>
+              <td className="col-md-3">{data.Department}</td>
+              <td className="col-md-2">{data.Extension}</td>
+              <td className="col-md-2 d-flex justify-content-end">
+                  <button className="btn btn-success me-2">
+                    <Link to={`/extension/edit/${data.id}`}>
+                      <BsPencil style={{ fill: "white" }} />
+                    </Link>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(data.id)}
+                    className="btn btn-danger "
+                  >
+                    <BsTrash />
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          ))
+        )}
       </table>
-}
-<ToastContainer
-position="bottom-right"
-autoClose={500}
-hideProgressBar
-newestOnTop={false}
-closeOnClick
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="colored"
-/>
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={500}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 };

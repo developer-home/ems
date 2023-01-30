@@ -27,20 +27,8 @@ const EditExtension = () => {
     fetchSingleExtension();
   }, [id]);
 
-  
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:8080/extensions/${id}`)
-  //     .then((resp)=>{
-  //       console.log(resp.response.data);
-  //     })
-  //     /*.then((resp) => setState(...resp.data[0]));
-  //     console.log(response.data[0])*/
-  // }, [id]);
-
   const handleUpdate = () => {
-    axios
+    const res=axios
       .put(`http://localhost:8080/extensions/${id}`, {
         FullNames,
         Department,
@@ -50,7 +38,7 @@ const EditExtension = () => {
         setState({ FullNames: "", Department: "", Extension: "" });
       })
       .catch((error) => toast.error(error.response.data));
-      toast.success("Contact Updated Successfully!!");
+      toast.success(res.data.message);
       navigate('/Admin/Dashboard')
   };
 
@@ -60,54 +48,80 @@ const EditExtension = () => {
   };
 
   return (
-    <div
-      className="container card text-center m-5 bg-secondary"
-      style={{ width: "500px" }}
-    >
-      <div className="card-header text-white fw-bold">
-        <span>Edit Extension</span>
-      </div>
-      <div className="card-body">
-        <form className="m-5" onSubmit={handleUpdate}>
-          <div className="form-group mb-3">
-            <input
-              type="text"
-              id="FullNames"
-              className="form-control"
-              name="FullNames"
-              value={FullNames||""}
-              onChange={handleChange}
-              placeholder="FullName"
-            />
+    <div className="container">
+
+<section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+              <div className="card mb-3">
+                <div className="card-body">
+                  <div className="pt-4 pb-2">
+                    <h5 className="card-title text-center pb-0 fs-4">
+                      Update Extension new Extension
+                    </h5>
+                    <p className="text-center small">Provide all Details - MTRH Extension </p>
+                  </div>
+
+                  <form className="row g-3 needs-validation" onSubmit={handleUpdate}>
+                    <div className="col-12">
+                      <label for="yourName" className="form-label">
+                        Full Names
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="FullNames"
+                        name="FullNames"
+                        value={FullNames||""}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="col-12">
+                      <label for="yourEmail" className="form-label">
+                        Department
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="Department"
+                        name="Department"
+                        value={Department||""}  
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="col-12">
+                      <label for="yourUsername" className="form-label">
+                        Extension
+                      </label>
+                      <div className="input-group has-validation">
+                        <input
+                          type="number"
+                          id="Extension"
+                          className="form-control"
+                          name="Extension"
+                          value={Extension||""}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <button type="submit" className="btn btn-primary w-100">
+                        Save Changed
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="form-group mb-3">
-            <input
-              type="text"
-              id="Department"
-              className="form-control"
-              name="Department"
-              value={Department||""}
-              onChange={handleChange}
-              placeholder="Department"
-            />
-          </div>
-          <div class="form-group mb-3">
-            <input
-              type="number"
-              id="Extension"
-              className="form-control"
-              name="Extension"
-              value={Extension||""}
-              onChange={handleChange}
-              placeholder="Extension"
-            />
-          </div>
-          <button type="submit" className="btn btn-primary p-1 me-2">
-            Save Changes
-          </button>
-          <button className="btn btn-danger p-1">Cancel</button>
-        </form>
-      </div>
+        </div>
+      </section>   
     </div>
   );
 };

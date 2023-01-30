@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddExtension = () => {
+const AddExtension = ({closeModal}) => {
   const [FullNames, setFullname] = useState("");
   const [Department, setDepartment] = useState("");
   const [Extension, setExtension] = useState("");
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const handleAddExtension = (e) => {
     const optn = {
@@ -17,69 +17,79 @@ const AddExtension = () => {
       Extension: Extension,
     };
     if (!FullNames || !Department || !Extension) {
-      toast.error("There is a missing field!!!", {
-        position: "top-center",
-        autoClose: 500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toast.error("There is a missing field!!!")
     } else {
       axios.post("http://localhost:8080/extensions", optn).then(() => {
-        toast.success("Extension added successfully!!!", {
-          position: "top-center",
-          autoClose: 500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-        setTimeout(()=>navigate.push('/Admin/Dashboard'),500);
+        navigate("/Admin/Dashboard");
+        toast.success("Extension added successfully!!!")
       });
     }
   };
 
   return (
     <div>
-      <form className="container mt-5 ml-5 mr-5 mb-5 p-5" action="">
-        <p className="fw-bolder">Create a new Extension</p>
-        <input
-          type="text"
-          className="form-control mt-5"
-          placeholder="Name"
-          onChange={(e) => setFullname(e.target.value)}
-          aria-label="Username"
-          aria-describedby="addon-wrapping"
-        />
-        <input
-          type="text"
-          className="form-control mt-3"
-          placeholder="Department"
-          onChange={(e) => setDepartment(e.target.value)}
-          aria-label="Username"
-          aria-describedby="addon-wrapping"
-        />
-        <input
-          type="text"
-          className="form-control mt-3"
-          placeholder="Extension"
-          onChange={(e) => setExtension(e.target.value)}
-          aria-label="Username"
-          aria-describedby="addon-wrapping"
-        />
-        <button
-          onClick={handleAddExtension}
-          type="button"
-          className="btn btn-primary mt-4 d-flex justify-content-center "
-        >
-          Add Extension
-        </button>
-      </form>
+      <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+              <div className="card mb-3">
+                <div className="card-body">
+                  <div className="pt-4 pb-2">
+                    <h5 className="card-title text-center pb-0 fs-4">
+                      Create A new Extension
+                    </h5>
+                    <p className="text-center small">Provide all Details - MTRH Extension </p>
+                  </div>
+
+                  <form className="row g-3 needs-validation" novalidate>
+                    <div className="col-12">
+                      <label for="yourName" className="form-label">
+                        Full Names
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        onChange={(e) => setFullname(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="col-12">
+                      <label for="yourEmail" className="form-label">
+                        Department
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        onChange={(e) => setDepartment(e.target.value)}
+                        
+                      />
+                    </div>
+
+                    <div className="col-12">
+                      <label for="yourUsername" className="form-label">
+                        Extension
+                      </label>
+                      <div className="input-group has-validation">
+                        <input
+                          type="number"
+                          className="form-control"
+                          onChange={(e) => setExtension(e.target.value)}
+                          
+                        />
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <button id="createBtn" onClick={handleAddExtension} className="btn btn-primary w-100">
+                        Create Extension
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <ToastContainer
         position="top-center"
         autoClose={500}

@@ -8,9 +8,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Spinner from "./components/Spinner";
 function App() {
-
   const [search, setSearch] = useState("");
-  const [loading, setLoading]= useState(false);
+  const [loading, setLoading] = useState(false);
   const [extensions, setExtensions] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [postPerPage] = useState(40);
@@ -22,7 +21,7 @@ function App() {
       setLoading(true);
       const res = await axios.get("http://localhost:8080/extensions");
       setExtensions(res.data);
-      setLoading(false)
+      setLoading(false);
       setTotalPosts(res.data.length);
     };
     fetchExtensions();
@@ -83,51 +82,61 @@ function App() {
                 />
               </InputGroup>
             </div>
-            <div className="col-md-4">
-              <InputGroup className="me-3">
-                <Form.Control
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Filter by Department"
-                />
-              </InputGroup>
-            </div>
+            <div className="col-md-4"></div>
             <div className="col-md-4"></div>
           </form>
         </div>
       </nav>
-      {loading ? <Spinner/>: 
-      <table className="table table-striped hover mt-3">
-        <thead className="table-info">
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Department </th>
-            <th>Extension </th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentPosts
-            .filter((item) => {
-              return search.toLocaleLowerCase() === ""
-                ? item
-                : item.Department.toLocaleLowerCase().includes(search);
-            })
-            .map((data) => [
-              <tr key={data.id}>
-                <td>{data.id}</td>
-                <td>{data.FullNames}</td>
-                <td>{data.Department}</td>
-                <td>{data.Extension}</td>
-              </tr>,
-            ])}
-        </tbody>
-      </table>
-      }
-      <nav aria-label="Page navigation">{showPagination()}</nav>
-      <footer className="container mt-4">
-        <div className="footer-content">
+      {loading ? (
+        <Spinner />
+      ) : (
+        <table className="table table-striped hover mt-3">
+          <thead className="table-info">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Department </th>
+              <th>Extension </th>
+            </tr>
+          </thead>
+          {extensions.length === 0 ? (
+            <tbody>
+              <tr>
+                <td colSpan={8} className="text-center mb-0">
+                  {" "}
+                  No Data Found in the database
+                </td>
+              </tr>
+            </tbody>
+          ) : (
+            currentPosts
+              .filter((item) => {
+                return search.toLocaleLowerCase() === ""
+                  ? item
+                  : item.FullNames.toLocaleLowerCase().includes(search);
+              })
+              .map((data) => (
+                <tbody>
+                  <tr key={data.id}>
+                    <td>{data.id}</td>
+                    <td>{data.FullNames}</td>
+                    <td>{data.Department}</td>
+                    <td>{data.Extension}</td>
+                  </tr>
+                </tbody>
+              ))
+          )}
+        </table>
+      )}
+      {extensions.length === 0 ? (
+        !showPagination()
+      ) : (
+        <nav aria-label="Page navigation">{showPagination()}</nav>
+      )}
+      <footer className="footer">
+        <div className="container footer-content">
           <div>
-            <p>@Moi Teaching and Referral Hospital</p>
+            <p>&copy; Moi Teaching and Referral Hospital</p>
           </div>
           <div>
             <p>Powered by MTRH Innovation</p>

@@ -13,7 +13,7 @@ const Home = () => {
         <Route path="/" element={<App />} />
         <Route path="/Administrator" element={<Login />} />
         <Route path="/Admin/Dashboard" element={<Dashboard />} />
-        <Route path="/Admin/%20%/AddNew" element={<AddExtension />} />
+        <Route path="/Admin/AddNew" element={<AddExtension />} />
         <Route path="/extension/edit/:id" element={<EditExtension />} />
       </Routes>
     </div>
